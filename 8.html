@@ -1,0 +1,33 @@
+<html> 
+<head>
+<title>Special Input Types Demo</title>
+</head>
+<body>
+<h3><center>Simple Registration Form</center></h3><br><br>
+<center><form name="simpleForm" action="success.html" target="_blank">
+ <div>
+    <label for="username"> User Name : </label>
+     <input type="text" autofocus="autofocus" required="required" name="usernmae" maxlength="15"/>
+    </div> <br><br><!-- focus is here when page is loaded) -->
+ <div> 
+     <label for="password">Password :</label>
+      <input type="password" minlength="8" maxlength="12" name="password" required="required" pattern="^[A-Za-z]+[0-9]$"/>   <br><br>	<!-- password should contain alphabets imposed using pattern attribute -->
+ </div>
+ <div>
+     <label for="gender">Gender:</label>
+     <!-- radio buttons-->
+     <input type="radio" value="male" required="required" name="gender"/> Male 
+     <input type="radio" value="female" name="gender"/> Female
+     <input type="radio" value="others" name="gender"/> Other</div><br><br>
+<div>
+  <label for="address">Address:</label>
+	  <textarea rows=4 cols=20  maxlength="100"></textarea> 
+    </div>
+	 <br><br>
+      <button type="submit">Submit</button> &nbsp;
+      <button type="reset">Reset</button>
+<br><br>
+</form>
+</center>
+</body>
+</html>

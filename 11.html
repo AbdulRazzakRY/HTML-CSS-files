@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dine Booking</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container {
+            border: 1px solid #ccc;
+            width: 650px;
+            padding: 40px;
+            margin: 20px auto;
+            text-align: center;
+        }
+        table { margin: 0 auto; text-align: left; }
+        td { padding: 8px; }
+        .right-align { text-align: right; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h3><u>Dine Booking</u></h3>
+        <form action="#" method="post">
+            <table>
+                <tr>
+                    <td class="right-align">Visitor Name:</td>
+                    <td>
+                        <input type="text" name="visitorName" maxlength="20" autofocus required>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="right-align">Number of members:</td>
+                    <td>
+                        <input type="number" name="members" max="99" required>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="right-align">Contact No:</td>
+                    <td>
+                        <input type="number" name="contactNo" required>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="right-align">Email:</td>
+                    <td>
+                        <input type="email" name="email" required>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="right-align">Type of Food:</td>
+                    <td>
+                        <input type="checkbox" name="food" value="South Indian" checked required> South Indian
+                        <input type="checkbox" name="food" value="North Indian"> North Indian
+                        <input type="checkbox" name="food" value="Chinese"> Chinese
+                        <input type="checkbox" name="food" value="Western"> Western
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="right-align">Room Status:</td>
+                    <td>
+                        <input type="radio" name="room" value="AC" checked required> AC
+                        <input type="radio" name="room" value="Non-AC"> Non-AC
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="right-align">Venue Preference:</td>
+                    <td>
+                        <select name="venue" required>
+                            <option value="">--SELECT--</option>
+                            <option value="Arena">Arena</option>
+                            <option value="Fiesta">Fiesta</option>
+                            <option value="Vista">Vista</option>
+                            <option value="Mythri">Mythri</option>
+                            <option value="Magna">Magna</option>
+                            <option value="Oasis">Oasis</option>
+                            <option value="Amoeba" disabled>Amoeba</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td>
+                        <br>
+                        <button type="submit">Book</button>
+                        <button type="reset">Reset</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+</body>
+</html>
