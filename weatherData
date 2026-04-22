@@ -1,0 +1,226 @@
+📁 Project Structure
+src/
+ ├── data/
+ │    └── weatherData.ts
+ ├── components/
+ │    ├── WeatherDashboard.tsx   (Parent)
+ │    ├── WeatherForecast.tsx    (Child)
+ │    ├── WeekOverview.tsx
+ │    └── WeatherAlerts.tsx
+ ├── types/
+ │    └── Weather.ts
+ └── App.tsx
+
+
+✅ 1. Types (types/Weather.ts)
+export interface Weather {
+  id: number;
+  day: string;
+  temperature: number;
+  condition: string;
+  humidity: number;
+  windSpeed: number;
+  precipitation: number;
+}
+
+
+✅ 2. Data (data/weatherData.ts)
+import { Weather } from "../types/Weather";
+
+export const newYorkData: Weather[] = [
+  { id: 1, day: "Monday", temperature: 72, condition: "Sunny", humidity: 45, windSpeed: 8, precipitation: 0 },
+  { id: 2, day: "Tuesday", temperature: 68, condition: "Partly Cloudy", humidity: 50, windSpeed: 10, precipitation: 10 },
+  { id: 3, day: "Wednesday", temperature: 75, condition: "Sunny", humidity: 40, windSpeed: 5, precipitation: 0 },
+  { id: 4, day: "Thursday", temperature: 63, condition: "Rainy", humidity: 80, windSpeed: 15, precipitation: 70 },
+  { id: 5, day: "Friday", temperature: 58, condition: "Thunderstorm", humidity: 85, windSpeed: 20, precipitation: 90 },
+  { id: 6, day: "Saturday", temperature: 65, condition: "Cloudy", humidity: 60, windSpeed: 12, precipitation: 20 },
+  { id: 7, day: "Sunday", temperature: 70, condition: "Sunny", humidity: 45, windSpeed: 7, precipitation: 0 },
+];
+
+export const chicagoData: Weather[] = [
+  { id: 1, day: "Monday", temperature: 65, condition: "Partly Cloudy", humidity: 55, windSpeed: 12, precipitation: 20 },
+  { id: 2, day: "Tuesday", temperature: 62, condition: "Cloudy", humidity: 60, windSpeed: 14, precipitation: 30 },
+  { id: 3, day: "Wednesday", temperature: 58, condition: "Rainy", humidity: 75, windSpeed: 18, precipitation: 60 },
+  { id: 4, day: "Thursday", temperature: 55, condition: "Thunderstorm", humidity: 80, windSpeed: 22, precipitation: 80 },
+  { id: 5, day: "Friday", temperature: 60, condition: "Cloudy", humidity: 70, windSpeed: 15, precipitation: 40 },
+  { id: 6, day: "Saturday", temperature: 64, condition: "Partly Cloudy", humidity: 60, windSpeed: 10, precipitation: 20 },
+  { id: 7, day: "Sunday", temperature: 68, condition: "Sunny", humidity: 50, windSpeed: 8, precipitation: 0 },
+];
+
+export const sfData: Weather[] = [
+  { id: 1, day: "Monday", temperature: 64, condition: "Foggy", humidity: 75, windSpeed: 8, precipitation: 0 },
+  { id: 2, day: "Tuesday", temperature: 66, condition: "Partly Cloudy", humidity: 70, windSpeed: 10, precipitation: 0 },
+  { id: 3, day: "Wednesday", temperature: 68, condition: "Sunny", humidity: 65, windSpeed: 12, precipitation: 0 },
+  { id: 4, day: "Thursday", temperature: 67, condition: "Foggy", humidity: 80, windSpeed: 10, precipitation: 0 },
+  { id: 5, day: "Friday", temperature: 65, condition: "Partly Cloudy", humidity: 75, windSpeed: 15, precipitation: 10 },
+  { id: 6, day: "Saturday", temperature: 63, condition: "Cloudy", humidity: 80, windSpeed: 12, precipitation: 20 },
+  { id: 7, day: "Sunday", temperature: 64, condition: "Foggy", humidity: 85, windSpeed: 8, precipitation: 0 },
+];
+✅ 3. Parent Component (WeatherDashboard.tsx)
+import React, { useState } from "react";
+import { Weather } from "../types/Weather";
+import { newYorkData, chicagoData, sfData } from "../data/weatherData";
+import WeatherForecast from "./WeatherForecast";
+import WeekOverview from "./WeekOverview";
+import WeatherAlerts from "./WeatherAlerts";
+
+const WeatherDashboard: React.FC = () => {
+  const [city, setCity] = useState("New York");
+
+  const getData = (): Weather[] => {
+    switch (city) {
+      case "Chicago":
+        return chicagoData;
+      case "San Francisco":
+        return sfData;
+      default:
+        return newYorkData;
+    }
+  };
+
+  const data = getData();
+
+  return (
+    <div>
+      <h2>Select a City</h2>
+      <button onClick={() => setCity("New York")}>New York</button>
+      <button onClick={() => setCity("Chicago")}>Chicago</button>
+      <button onClick={() => setCity("San Francisco")}>San Francisco</button>
+
+      <h1>{city} 7-Day Weather Forecast</h1>
+
+      <WeekOverview data={data} />
+      <WeatherForecast data={data} />
+      <WeatherAlerts data={data} />
+    </div>
+  );
+};
+
+export default WeatherDashboard;
+
+
+✅ 4. Child Component (WeatherForecast.tsx)
+import React from "react";
+import { Weather } from "../types/Weather";
+
+interface Props {
+  data: Weather[];
+}
+
+const WeatherForecast: React.FC<Props> = ({ data }) => {
+  return (
+    <div>
+      <h2>Daily Forecast</h2>
+      {data.map((day) => (
+        <div key={day.id}>
+          <h3>{day.day}</h3>
+          <p>{day.temperature}°F</p>
+          <p>{day.condition}</p>
+          <p>Humidity: {day.humidity}%</p>
+          <p>Wind: {day.windSpeed} mph</p>
+
+          {day.condition === "Sunny" && <p>Great day for outdoor activities!</p>}
+          {day.condition === "Rainy" && <p>Don't forget your umbrella!</p>}
+          {day.windSpeed >= 15 && <p>High winds expected</p>}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default WeatherForecast;
+
+
+✅ 5. Week Overview (WeekOverview.tsx)
+import React from "react";
+import { Weather } from "../types/Weather";
+
+const WeekOverview: React.FC<{ data: Weather[] }> = ({ data }) => {
+  const avgTemp =
+    data.reduce((sum, d) => sum + d.temperature, 0) / data.length;
+
+  const hottest = data.reduce((a, b) =>
+    a.temperature > b.temperature ? a : b
+  );
+
+  const coldest = data.reduce((a, b) =>
+    a.temperature < b.temperature ? a : b
+  );
+
+  const sunnyDays = data.filter(d => d.condition === "Sunny").length;
+  const rainyDays = data.filter(d => d.condition === "Rainy" || d.condition === "Thunderstorm").length;
+
+  return (
+    <div>
+      <h2>Week Overview</h2>
+      <p>Average Temperature: {avgTemp.toFixed(1)}°F</p>
+      <p>Hottest Day: {hottest.day} ({hottest.temperature}°F)</p>
+      <p>Coldest Day: {coldest.day} ({coldest.temperature}°F)</p>
+      <p>Sunny Days: {sunnyDays}</p>
+      <p>Rainy Days: {rainyDays}</p>
+    </div>
+  );
+};
+
+export default WeekOverview;
+
+
+✅ 6. Weather Alerts (WeatherAlerts.tsx)
+import React from "react";
+import { Weather } from "../types/Weather";
+
+const WeatherAlerts: React.FC<{ data: Weather[] }> = ({ data }) => {
+  const rainDays = data.filter(d => d.precipitation > 60);
+  const windDays = data.filter(d => d.windSpeed >= 15);
+
+  return (
+    <div>
+      <h2>Weather Alerts</h2>
+
+      {rainDays.length > 0 && (
+        <div>
+          <h3>Rain Alert</h3>
+          <p>
+            Heavy rain expected on:{" "}
+            {rainDays.map(d => d.day).join(", ")}
+          </p>
+        </div>
+      )}
+
+      {windDays.length > 0 && (
+        <div>
+          <h3>Wind Advisory</h3>
+          <p>
+            Strong winds expected on:{" "}
+            {windDays.map(d => d.day).join(", ")}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default WeatherAlerts;
+
+
+✅ 7. App.tsx
+import React from "react";
+import WeatherDashboard from "./components/WeatherDashboard";
+
+const App: React.FC = () => {
+  return (
+    <div>
+      <WeatherDashboard />
+    </div>
+  );
+};
+
+export default App;
+
+
+🚀 Done — What you now haveClean TypeScript types
+Parent-child architecture ✔
+Dynamic city switching ✔
+Weekly analytics ✔
+Alerts logic ✔
+Zero syntax errors ✔
